@@ -28,16 +28,33 @@
                         <form>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <input type="text" id="list-input" placeholder="Eg. Roberta's'" data-bind="textInput: itemToAdd">
+                                    <input type="text" id="list-input" placeholder="Eg. Clinton Hill, Brooklyn" data-bind="textInput: itemToAdd">
                                 </div>
                             </div>
                             <div class="row text-left">
                                 <div class="col-md-12">
-                                    <button class="btn btn-primary" type="submit" id="add-button" data-bind="enable: hasItem">Add to Map</button>
-                                    <button class="btn btn-danger" type="submit" id="clear-button" data-bind="enable: isNotEmpty">Clear Map</button>
+                                    <button class="btn btn-primary" type="submit" id="add-button" data-bind="click: search, enable: hasItem">Search</button>
                                 </div>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div data-bind="if: isNotEmpty" class="list-view">
+                        <ul class="main-list" data-bind="foreach: listItems">
+                            <li class="list-item">
+                                <div class="list-text">
+                                    <div class="text-part">
+                                        <p class="list-comp" id="item-name" data-bind = "text: name"></p>
+                                    </div>
+                                    <i class="fa fa-minus text-part delete-button" data-bind = "click: $root.removeItem"></i>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

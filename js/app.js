@@ -1,19 +1,18 @@
 $(document).ready(function(){
     
     //model object
-    let listData = function(data,time){
-        this.item = ko.observable(data);
-        this.striked = ko.observable(false);
-        this.timestamp = ko.observable(time);
-
-       this.strike = function(x) {
-           if (this.striked()) {
-               this.striked(false);
-           } else {
-               this.striked(true);
-           }
-       }
+    let ListData = function(data){
+        let self = this;
+        self.id = ko.observable(data.id);
+        self.name = ko.observable(data.name);
+        self.lat = ko.observable(data.location.lat);
+        self.lng = ko.observable(data.location.lng);
+        self.address = ko.observable(data.address);
+        self.coords = ko.computed(function(){
+            return {lat: self.lat, lng: self.lng};
+        })
     }
+
     //VM
     let ViewModel = function() {
         let self = this;
@@ -22,11 +21,19 @@ $(document).ready(function(){
 
         self.itemToAdd = ko.observable("");
 
-        self.addToList = function(){
-            let item = self.itemToAdd();
-            let currentTime = (new Date(Date.now())).toLocaleDateString();
-            self.listItems.push(new listData(item,currentTime));
-            self.itemToAdd("");
+        self.search = function(){
+            let search = self.itemToAdd();
+            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=10&near=${search}`
+            fetch(url).then(function(response){
+                return response.json();
+            }).then(function(data){
+                data.response.venues.forEach(function(venue){
+                    let venueObj = new ListData(venue)
+                    self.listItems.push(venueObj);
+                });
+            }).catch(function(){
+                console.log("Error fetching request");
+            });
         }
 
         self.clearList = function() {
@@ -35,7 +42,7 @@ $(document).ready(function(){
 
         self.hasItem = ko.computed(function(){
             return (self.itemToAdd());
-        })
+        });
 
         self.isNotEmpty = ko.computed(function(){
             return (self.listItems().length);
