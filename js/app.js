@@ -7,7 +7,7 @@ $(document).ready(function(){
         self.name = ko.observable(data.name);
         self.lat = ko.observable(data.location.lat);
         self.lng = ko.observable(data.location.lng);
-        self.address = ko.observable(data.address);
+        self.address = ko.observable(data.location.address || data.location.formattedAddress);
         self.coords = ko.computed(function(){
             return {lat: self.lat, lng: self.lng};
         })
