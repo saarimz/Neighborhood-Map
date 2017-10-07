@@ -24,18 +24,7 @@ $(document).ready(function(){
         self.search = function(){
             let search = self.itemToAdd();
             let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=10&near=${search}`
-            fetch(url).then(function(response){
-                return response.json();
-            }).then(function(data){
-                self.clearList();
-                data.response.venues.forEach(function(venue){
-                    let venueObj = new ListData(venue)
-                    self.listItems.push(venueObj);
-                });
-            }).catch(function(){
-                $(".list-view").html("<li>Not Found</li>");
-                console.log("Error fetching request");
-            });
+            self.foursquareSearch(url);
         }
 
         self.clearList = function() {
@@ -54,18 +43,36 @@ $(document).ready(function(){
             self.listItems.remove(item);
         }
 
-        
+        self.currentLocationSearch = function(){
+            navigator.geolocation.getCurrentPosition(function(position){
+                console.log(position.coords.latitude);
+                console.log(position.coords.longitude);
+                let ll = `${position.coords.latitude},${position.coords.longitude}`
+                let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=10&ll=${ll}`
+                self.foursquareSearch(url);
+            });
+        }
+
+        self.foursquareSearch = function(url){
+            fetch(url).then(function(response){
+                return response.json();
+            }).then(function(data){
+                self.clearList();
+                data.response.venues.forEach(function(venue){
+                    let venueObj = new ListData(venue)
+                    self.listItems.push(venueObj);
+                    //clear list after search
+                    self.itemToAdd(null);
+                });
+            }).catch(function(){
+                $(".list-view").html("<li>Not Found</li>");
+                console.log("Error fetching request");
+            });
+        }
+
     } 
 
     //ko apply bindings
     ko.applyBindings(new ViewModel());
-    let map;
-
-    function initMap(){
-        map = new google.maps.Map(document.getElementById("map"),{
-            center: {lat: 40.7134, lng: -74.0055},
-            zoom: 12
-        });
-    }
 });
 

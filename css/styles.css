@@ -3,10 +3,10 @@
 body {
     box-sizing: border-box;
     font-family: Avenir, Helvetica, sans-serif;
+    font-size: 2vw;
     background: #ECE9E6;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-      
 }
 
 /*Header*/
@@ -50,6 +50,7 @@ body {
 @media screen and (max-width: 600px) {
     .button-container {
         text-align: center;
+        margin-bottom: 6px;
     }
 }
 
@@ -57,6 +58,7 @@ body {
 
     .button-container {
         text-align: left;
+        margin-bottom: 12px;
     }
 }
 
