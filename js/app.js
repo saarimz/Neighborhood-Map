@@ -9,8 +9,17 @@ $(document).ready(function(){
         self.lng = ko.observable(data.location.lng);
         self.address = ko.observable(data.location.address || data.location.formattedAddress);
         self.coords = ko.computed(function(){
-            return {lat: self.lat, lng: self.lng};
-        })
+            return {lat: self.lat(), lng: self.lng()};
+        });
+
+        self.marker = new google.maps.Marker({
+            position: {lat: self.lat(), lng: self.lng()},
+            title: self.name(),
+            map: map,
+            animation: google.maps.Animation.DROP
+        });
+
+        bounds.extend(self.marker.position);
     }
 
     //VM
@@ -23,11 +32,18 @@ $(document).ready(function(){
 
         self.search = function(){
             let search = self.itemToAdd();
-            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=10&near=${search}`
+            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=20&near=${search}`
             self.foursquareSearch(url);
         }
 
         self.clearList = function() {
+            //remvoe markers
+            self.listItems().forEach(function(item){
+                item.marker.setMap(null);
+            });
+            //reset bounds
+
+            //remove item from list
             self.listItems.removeAll();
         }
 
@@ -40,15 +56,17 @@ $(document).ready(function(){
         })
 
         self.removeItem = function(item){
+            //marker
+            item.marker.setMap(null);
+            //item
             self.listItems.remove(item);
+            
         }
 
         self.currentLocationSearch = function(){
             navigator.geolocation.getCurrentPosition(function(position){
-                console.log(position.coords.latitude);
-                console.log(position.coords.longitude);
                 let ll = `${position.coords.latitude},${position.coords.longitude}`
-                let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=10&ll=${ll}`
+                let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=20&ll=${ll}`
                 self.foursquareSearch(url);
             });
         }
@@ -61,6 +79,7 @@ $(document).ready(function(){
                 data.response.venues.forEach(function(venue){
                     let venueObj = new ListData(venue)
                     self.listItems.push(venueObj);
+                    map.fitBounds(bounds);
                     //clear list after search
                     self.itemToAdd(null);
                 });
@@ -74,5 +93,6 @@ $(document).ready(function(){
 
     //ko apply bindings
     ko.applyBindings(new ViewModel());
+
 });
 

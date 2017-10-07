@@ -75,6 +75,8 @@ ul,li {
 .main-list {
     margin-top: 1%;
     text-align: left;
+    height: 70vh;
+    overflow: scroll;
 }
 
 .list-item {
@@ -107,14 +109,29 @@ ul,li {
 }
 
 .text-part {
-    display: flex;  
-    
+    width: 90%;
+}
+
+#item-name {
+    font-size: 1.5em;
+    font-weight: bolder;
+}
+
+#item-address {
+    font-weight: lighter;
+    font-size: 1em;
+}
+
+.delete-button {
+    width: 10%;
+    padding: 1%;
+    margin: 0 auto;
+    font-size: 2em;
 }
 
 #item-name {
     color: #F7F7F7;
 }
-
 
 .fa-minus {
     color: #DB504A;
