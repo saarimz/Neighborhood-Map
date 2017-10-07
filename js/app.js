@@ -27,11 +27,13 @@ $(document).ready(function(){
             fetch(url).then(function(response){
                 return response.json();
             }).then(function(data){
+                self.clearList();
                 data.response.venues.forEach(function(venue){
                     let venueObj = new ListData(venue)
                     self.listItems.push(venueObj);
                 });
             }).catch(function(){
+                $(".list-view").html("<li>Not Found</li>");
                 console.log("Error fetching request");
             });
         }
