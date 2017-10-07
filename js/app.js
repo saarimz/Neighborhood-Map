@@ -8,8 +8,8 @@ $(document).ready(function(){
         self.lat = ko.observable(data.location.lat);
         self.lng = ko.observable(data.location.lng);
         self.address = ko.observable(data.location.address || data.location.formattedAddress);
-        self.coords = ko.computed(function(){
-            return {lat: self.lat(), lng: self.lng()};
+        self.coords = ko.computed(() => {
+            return {lat: self.lat(), lng: self.lng()}
         });
 
         self.marker = new google.maps.Marker({
@@ -30,15 +30,15 @@ $(document).ready(function(){
 
         self.itemToAdd = ko.observable("");
 
-        self.search = function(){
+        self.search = () => {
             let search = self.itemToAdd();
             let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=20&near=${search}`
             self.foursquareSearch(url);
         }
 
-        self.clearList = function() {
+        self.clearList = () => {
             //remvoe markers
-            self.listItems().forEach(function(item){
+            self.listItems().forEach((item) =>{
                 item.marker.setMap(null);
             });
             //reset bounds
@@ -47,15 +47,15 @@ $(document).ready(function(){
             self.listItems.removeAll();
         }
 
-        self.hasItem = ko.computed(function(){
+        self.hasItem = ko.computed(() => {
             return (self.itemToAdd());
         });
 
-        self.isNotEmpty = ko.computed(function(){
+        self.isNotEmpty = ko.computed(() => {
             return (self.listItems().length);
         })
 
-        self.removeItem = function(item){
+        self.removeItem = (item) => {
             //marker
             item.marker.setMap(null);
             //item
@@ -63,7 +63,7 @@ $(document).ready(function(){
             
         }
 
-        self.currentLocationSearch = function(){
+        self.currentLocationSearch = () => {
             navigator.geolocation.getCurrentPosition(function(position){
                 let ll = `${position.coords.latitude},${position.coords.longitude}`
                 let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=20&ll=${ll}`
@@ -71,21 +71,20 @@ $(document).ready(function(){
             });
         }
 
-        self.foursquareSearch = function(url){
-            fetch(url).then(function(response){
+        self.foursquareSearch = (url) => {
+            fetch(url).then((response) => {
                 return response.json();
-            }).then(function(data){
+            }).then((data) => {
                 self.clearList();
-                data.response.venues.forEach(function(venue){
+                data.response.venues.forEach((venue) => {
                     let venueObj = new ListData(venue)
                     self.listItems.push(venueObj);
                     map.fitBounds(bounds);
                     //clear list after search
                     self.itemToAdd(null);
                 });
-            }).catch(function(){
+            }).catch(() =>{
                 $(".list-view").html("<li>Not Found</li>");
-                console.log("Error fetching request");
             });
         }
 
