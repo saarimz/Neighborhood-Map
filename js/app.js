@@ -30,9 +30,14 @@ $(document).ready(function(){
 
         self.itemToAdd = ko.observable("");
 
+        //search limit bar
+        self.searchLimit = ko.observableArray([10,20,30,40,50,100]);
+        self.limitValue = ko.observable();
+
         self.search = () => {
             let search = self.itemToAdd();
-            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=20&near=${search}`
+            let limit = self.limitValue();
+            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=${limit}&near=${search}`
             self.foursquareSearch(url);
         }
 
@@ -66,7 +71,8 @@ $(document).ready(function(){
         self.currentLocationSearch = () => {
             navigator.geolocation.getCurrentPosition(function(position){
                 let ll = `${position.coords.latitude},${position.coords.longitude}`
-                let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=20&ll=${ll}`
+                let limit = self.limitValue();
+                let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=${limit}&ll=${ll}`
                 self.foursquareSearch(url);
             });
         }
