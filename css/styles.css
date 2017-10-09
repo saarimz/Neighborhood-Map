@@ -137,6 +137,9 @@ ul,li {
     color: #DB504A;
 }
 
+.hidden {
+    visibility: hidden;
+}
 /*map styles*/
 
 #map {

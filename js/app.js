@@ -19,7 +19,8 @@ $(document).ready(function(){
             animation: google.maps.Animation.DROP
         });
 
-        bounds.extend(self.marker.position);
+        //bounds.extend(self.marker.position);
+        //map.fitBounds(bounds);
     }
 
     //VM
@@ -37,7 +38,7 @@ $(document).ready(function(){
         self.search = () => {
             let search = self.itemToAdd();
             let limit = self.limitValue();
-            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=${limit}&near=${search}`
+            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=${limit}&near=${search}`;
             self.foursquareSearch(url);
         }
 
@@ -46,7 +47,6 @@ $(document).ready(function(){
             self.listItems().forEach((item) =>{
                 item.marker.setMap(null);
             });
-            //reset bounds
 
             //remove item from list
             self.listItems.removeAll();
@@ -72,28 +72,35 @@ $(document).ready(function(){
             navigator.geolocation.getCurrentPosition(function(position){
                 let ll = `${position.coords.latitude},${position.coords.longitude}`
                 let limit = self.limitValue();
-                let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=${limit}&ll=${ll}`
+                let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=${limit}&ll=${ll}`;
                 self.foursquareSearch(url);
             });
         }
 
         self.foursquareSearch = (url) => {
+            $(".fa-spinner").toggleClass("hidden");
+
             fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
+                let bounds = new google.maps.LatLngBounds();
                 self.clearList();
                 data.response.venues.forEach((venue) => {
                     let venueObj = new ListData(venue)
                     self.listItems.push(venueObj);
-                    map.fitBounds(bounds);
+                    bounds.extend(venueObj.marker.position);
                     //clear list after search
                     self.itemToAdd(null);
                 });
-            }).catch(() =>{
+                $(".fa-spinner").toggleClass("hidden");
+                map.fitBounds(bounds);
+            }).catch((e) =>{
+                $(".fa-spinner").toggleClass("hidden");
                 $(".list-view").html("<li>Not Found</li>");
+                console.log(e);
             });
+            
         }
-
     } 
 
     //ko apply bindings
