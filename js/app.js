@@ -18,9 +18,6 @@ $(document).ready(function(){
             map: map,
             animation: google.maps.Animation.DROP
         });
-
-        //bounds.extend(self.marker.position);
-        //map.fitBounds(bounds);
     }
 
     //VM
