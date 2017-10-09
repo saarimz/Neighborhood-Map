@@ -32,6 +32,8 @@ $(document).ready(function(){
         self.searchLimit = ko.observableArray([10,20,30,40,50,100]);
         self.limitValue = ko.observable();
 
+        //to do: add a dropdown for category
+
         self.search = () => {
             let search = self.itemToAdd();
             let limit = self.limitValue();
@@ -75,6 +77,7 @@ $(document).ready(function(){
         }
 
         self.foursquareSearch = (url) => {
+            //TO DO: convert this to Knockout
             $(".fa-spinner").toggleClass("hidden");
 
             fetch(url).then((response) => {
@@ -86,14 +89,18 @@ $(document).ready(function(){
                     let venueObj = new ListData(venue)
                     self.listItems.push(venueObj);
                     bounds.extend(venueObj.marker.position);
-                    //clear list after search
+                    //clear item after search
                     self.itemToAdd(null);
                 });
+                //TO DO: convert this to Knockout
                 $(".fa-spinner").toggleClass("hidden");
+
                 map.fitBounds(bounds);
             }).catch((e) =>{
+                //TO DO: convert this to Knockout
                 $(".fa-spinner").toggleClass("hidden");
                 $(".list-view").html("<li>Not Found</li>");
+
                 console.log(e);
             });
             
