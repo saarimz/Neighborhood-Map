@@ -73,6 +73,9 @@
                             </li>
                         </ul>
                     </div>
+                    <div data-bind="if: requestFailed">
+                        <p class="not-found">Not Found</p>
+                    </div>
                     <div data-bind="ifnot: isNotEmpty">
                         <i class="fa fa-spinner fa-spin hidden" aria-hidden="true"></i>
                     </div>

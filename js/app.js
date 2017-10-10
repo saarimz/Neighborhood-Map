@@ -31,6 +31,7 @@ $(document).ready(function(){
         //search limit bar
         self.searchLimit = ko.observableArray([10,20,30,40,50,100]);
         self.limitValue = ko.observable();
+        self.requestFailed = ko.observable(false);
 
         self.search = () => {
             let search = self.itemToAdd();
@@ -55,7 +56,8 @@ $(document).ready(function(){
 
         self.isNotEmpty = ko.computed(() => {
             return (self.listItems().length);
-        })
+        });
+
 
         self.removeItem = (item) => {
             //marker
@@ -88,12 +90,13 @@ $(document).ready(function(){
                     bounds.extend(venueObj.marker.position);
                     //clear list after search
                     self.itemToAdd(null);
+                    self.requestFailed(false);
                 });
                 $(".fa-spinner").toggleClass("hidden");
                 map.fitBounds(bounds);
             }).catch((e) =>{
                 $(".fa-spinner").toggleClass("hidden");
-                $(".list-view").html("<li>Not Found</li>");
+                self.requestFailed(true);
                 console.log(e);
             });
             
