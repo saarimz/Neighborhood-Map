@@ -32,7 +32,13 @@ $(document).ready(function(){
         self.searchLimit = ko.observableArray([10,20,30,40,50,100]);
         self.limitValue = ko.observable();
 
+<<<<<<< HEAD
         //to do: add a dropdown for category
+=======
+        //api request
+        self.requestHappening = ko.observable(false);
+        self.requestFailed = ko.observable(false);
+>>>>>>> ec9b63881befbf4c1c6626454225b80b5c5006e2
 
         self.search = () => {
             let search = self.itemToAdd();
@@ -77,21 +83,28 @@ $(document).ready(function(){
         }
 
         self.foursquareSearch = (url) => {
+<<<<<<< HEAD
             //TO DO: convert this to Knockout
             $(".fa-spinner").toggleClass("hidden");
 
+=======
+            self.requestHappening(true);
+>>>>>>> ec9b63881befbf4c1c6626454225b80b5c5006e2
             fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
                 let bounds = new google.maps.LatLngBounds();
                 self.clearList();
                 data.response.venues.forEach((venue) => {
+                    self.requestHappening(false);
                     let venueObj = new ListData(venue)
                     self.listItems.push(venueObj);
                     bounds.extend(venueObj.marker.position);
                     //clear item after search
                     self.itemToAdd(null);
+                    self.requestFailed(false);
                 });
+<<<<<<< HEAD
                 //TO DO: convert this to Knockout
                 $(".fa-spinner").toggleClass("hidden");
 
@@ -101,6 +114,12 @@ $(document).ready(function(){
                 $(".fa-spinner").toggleClass("hidden");
                 $(".list-view").html("<li>Not Found</li>");
 
+=======
+                map.fitBounds(bounds);
+            }).catch((e) => {
+                self.requestHappening(false);
+                self.requestFailed(true);
+>>>>>>> ec9b63881befbf4c1c6626454225b80b5c5006e2
                 console.log(e);
             });
             

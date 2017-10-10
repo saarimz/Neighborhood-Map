@@ -140,6 +140,12 @@ ul,li {
 .hidden {
     visibility: hidden;
 }
+
+.not-found {
+    border: 2px solid red;
+    padding: 5%;
+    border-radius: 5px;
+}
 /*map styles*/
 
 #map {
