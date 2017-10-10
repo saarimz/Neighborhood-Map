@@ -22,14 +22,40 @@ body {
 }
 
 /*input / search bar */
+.input-field {
+    border: 3px solid pink;
+}
+
+/*
+#list-input {
+    width: 95%;
+    border: 0;
+    border: 2px solid #003459;
+    background: transparent;   
+}
+
+#clear-sign {
+    width: 5%;
+    height: 100%;
+    margin-left: -30px;
+    background: transparent;
+    border: none;
+    border: 1px solid black;
+} */
+
 
 #list-input {
-    width: 100%;
-    margin: 10px 0;
-    border: 0;
-    border-bottom: 2px solid #003459;
-    padding: 0 5px 5px 10px;
+    display: inline-block;
+    border: 2px solid #96ACB7;
+    border-radius: 5px;
+    width: 90%;
+  }
+  
+#clear-sign {
+    width: 10%;
+    margin-left: -5vw;
     background: transparent;
+    border: none;
 }
 
 #list-input:focus {
