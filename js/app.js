@@ -31,6 +31,9 @@ $(document).ready(function(){
         //search limit bar
         self.searchLimit = ko.observableArray([10,20,30,40,50,100]);
         self.limitValue = ko.observable();
+
+        //api request
+        self.requestHappening = ko.observable(false);
         self.requestFailed = ko.observable(false);
 
         self.search = () => {
@@ -77,14 +80,14 @@ $(document).ready(function(){
         }
 
         self.foursquareSearch = (url) => {
-            $(".fa-spinner").toggleClass("hidden");
-
+            self.requestHappening(true);
             fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
                 let bounds = new google.maps.LatLngBounds();
                 self.clearList();
                 data.response.venues.forEach((venue) => {
+                    self.requestHappening(false);
                     let venueObj = new ListData(venue)
                     self.listItems.push(venueObj);
                     bounds.extend(venueObj.marker.position);
@@ -92,10 +95,9 @@ $(document).ready(function(){
                     self.itemToAdd(null);
                     self.requestFailed(false);
                 });
-                $(".fa-spinner").toggleClass("hidden");
                 map.fitBounds(bounds);
-            }).catch((e) =>{
-                $(".fa-spinner").toggleClass("hidden");
+            }).catch((e) => {
+                self.requestHappening(false);
                 self.requestFailed(true);
                 console.log(e);
             });
