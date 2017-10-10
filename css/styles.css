@@ -22,8 +22,13 @@ body {
 }
 
 /*input / search bar */
+
+
 .input-field {
-    border: 3px solid pink;
+    display: inline-block;
+    border: 2px solid #96ACB7;
+    border-radius: 5px;
+    width: 100%;
 }
 
 /*
@@ -45,17 +50,18 @@ body {
 
 
 #list-input {
-    display: inline-block;
-    border: 2px solid #96ACB7;
-    border-radius: 5px;
-    width: 90%;
-  }
+    width: 92%;
+    border: 0;
+    background: transparent;   
+}
   
 #clear-sign {
-    width: 10%;
-    margin-left: -5vw;
     background: transparent;
     border: none;
+    position: relative;
+    border: 1px solid blue;
+    width: 7%;
+    right: 50px;
 }
 
 #list-input:focus {
