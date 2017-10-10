@@ -65,6 +65,7 @@ $(document).ready(function(){
             return (self.listItems().length);
         })
 
+
         self.removeItem = (item) => {
             //marker
             item.marker.setMap(null);
