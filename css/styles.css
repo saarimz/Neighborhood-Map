@@ -26,8 +26,6 @@ body {
 
 .input-field {
     display: inline-block;
-    border: 2px solid #96ACB7;
-    border-radius: 5px;
     width: 100%;
 }
 
@@ -52,6 +50,9 @@ body {
 #list-input {
     width: 92%;
     border: 0;
+    margin: 0;
+    padding: 0.3vw 0.2vw;
+    border-bottom: 2px solid #003459;
     background: transparent;   
 }
   
@@ -59,9 +60,8 @@ body {
     background: transparent;
     border: none;
     position: relative;
-    border: 1px solid blue;
     width: 7%;
-    right: 50px;
+    right: 5vw;
 }
 
 #list-input:focus {
@@ -87,7 +87,6 @@ body {
 }
 
 @media screen and (min-width: 601px) {
-
     .button-container {
         text-align: left;
         margin-bottom: 12px;
@@ -173,11 +172,56 @@ ul,li {
     visibility: hidden;
 }
 
+/*Not Found Modal */
+
 .not-found {
-    border: 2px solid red;
+    border: 2px solid #003459;
     padding: 5%;
+    margin: 5%;
     border-radius: 5px;
+    background: white;
+    box-shadow: 0.1vw 0.1vw 0.1vw;
 }
+
+@media screen and (min-width: 768px) {
+    .not-found h3 {
+        font-size: 1em;
+        font-weight: bolder;
+        color:#DB504A;
+    }  
+
+    .not-found p{
+        font-size: 0.5em;
+        color: #383838
+    }
+}
+
+@media screen and (max-width: 767px) and (min-width: 401px){ 
+    .not-found h3 {
+        font-size: 2em;
+        font-weight: bolder;
+        color:#DB504A;
+    }
+    
+    .not-found p{
+        font-size: 1em;
+        color: #383838
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .not-found h3 {
+        font-size: 4em;
+        font-weight: bolder;
+        color:#DB504A;
+    }
+    
+    .not-found p{
+        font-size: 3em;
+        color: #383838
+    }
+}
+
 /*map styles*/
 
 #map {
