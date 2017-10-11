@@ -20,8 +20,10 @@ $(document).ready(function(){
             icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
         });
 
+        self.infoWindowTemplate = _.template($("#infoWindowTemplate").html());
+
         self.infoWindow = new google.maps.InfoWindow({
-            content: `<div><p>${self.name()}</p><p>${self.address()}</p></div>`
+            content: self.infoWindowTemplate({'name':self.name(),'address':self.address()})
         });
 
         self.marker.addListener('click', () => {
@@ -40,13 +42,13 @@ $(document).ready(function(){
             self.infoWindow.open(map, self.marker);
             self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
             self.marker.setAnimation(google.maps.Animation.BOUNCE);
-        }
+        };
 
         self.unhighlightMarker = () => {
             self.infoWindow.close();
             self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
             self.marker.setAnimation(null);
-        }
+        };
     }
 
     //VM
