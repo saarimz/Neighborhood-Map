@@ -15,7 +15,7 @@ $(document).ready(function(){
         self.coords = ko.computed(() => {
             return {lat: self.lat(), lng: self.lng()}
         });
-
+        self.verified = ko.observable(data.verified);
 
         //map data
         self.marker = new google.maps.Marker({
@@ -49,6 +49,10 @@ $(document).ready(function(){
 
         self.getInfoWindow = () =>{
             return self.infoWindow;
+        };
+
+        self.getVerified = () => {
+            return self.verified();
         };
 
         //highlight marker + open infowindow on hover
@@ -86,6 +90,37 @@ $(document).ready(function(){
         //search category
         self.searchCategories = ko.observableArray(['Food','Drink','Fun','Shop']);
         self.categoryValue = ko.observable();
+
+        //filter
+        self.filterOptions = ko.observableArray(['All','Verified','Unverified'])
+        self.currentFilter = ko.observable('All');
+
+        self.currentFilter.subscribe(function(latest){
+            let filter;
+            let originalList = self.listItems();
+            let filteredList = originalList.reduce((acc,val) => {
+                switch (self.currentFilter()) {
+                    case 'All':
+                        acc.push(val);
+                        break;
+                    case  'Verified':
+                        if (val.getVerified()) {
+                            acc.push(val);
+                        }
+                        break;
+                    case 'Unverified':
+                        if (!val.getVerified()) {
+                            acc.push(val);
+                        }
+                        break;
+                    default:
+                        console.log("Error")
+                }
+                return acc;
+            },[]);
+            console.log(filteredList);
+            //self.listItems(filteredList);
+        }, self);
 
         self.getCategoryID = (category) => {
             switch (category) {
