@@ -21,7 +21,6 @@ $(document).ready(function(){
         self.marker = new google.maps.Marker({
             position: {lat: self.lat(), lng: self.lng()},
             title: self.name(),
-            map: map,
             animation: google.maps.Animation.DROP,
             icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
         });
@@ -106,59 +105,36 @@ $(document).ready(function(){
          //filter
          self.filteredList = ko.computed(function(){
             let filter = self.currentFilter();
-            console.log(filter);
             if (!filter) {
                 return self.listItems();
             } else {
                 return ko.utils.arrayFilter(self.listItems(),function(item){
                     switch (filter) {
                         case 'Verified':
-                            return (item.getVerified());
+                            if (item.getVerified()) {
+                                item.marker.setMap(map);
+                                return true;
+                            } else {
+                                item.marker.setMap(null);
+                                return false;
+                            }
                             break;
                         case 'Unverified':
-                            return (!item.getVerified())
+                            if (!item.getVerified()) {
+                                item.marker.setMap(map);
+                                return true;
+                            } else {
+                                item.marker.setMap(null);
+                                return false;
+                            }
                             break;
                         default:
+                            item.marker.setMap(map);
                             return true;
                     }
                 });
             }
         },self);
-
-        /*
-        self.currentFilter.subscribe(function(latest){
-            let filter;
-            let originalList = self.listItems();
-            let filteredList = originalList.reduce((acc,val) => {
-                switch (latest) {
-                    case 'All':
-                        acc.push(val);
-                        val.addMarker();
-                        break;
-                    case  'Verified':
-                        if (val.getVerified()) {
-                            acc.push(val);
-                            val.addMarker();
-                        } else {
-                            val.removeMarker();
-                        }
-                        break;
-                    case 'Unverified':
-                        if (!val.getVerified()) {
-                            acc.push(val);
-                            val.addMarker();
-                        }
-                        else {
-                            val.removeMarker();
-                        }
-                        break;
-                    default:
-                        console.log("Error")
-                }
-                return acc;
-            },[]);
-            console.log(filteredList);
-        }, self); */
 
         self.getCategoryID = (category) => {
             switch (category) {
