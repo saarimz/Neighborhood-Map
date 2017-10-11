@@ -29,7 +29,7 @@ $(document).ready(function(){
         self.itemToAdd = ko.observable("");
 
         //search limit bar
-        self.searchLimit = ko.observableArray([10,20,30,40,50,100]);
+        self.searchLimit = ko.observableArray([10,20,30,40,50]);
         self.limitValue = ko.observable();
 
         //api request
