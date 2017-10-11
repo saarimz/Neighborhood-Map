@@ -42,6 +42,15 @@ $(document).ready(function(){
             self.infoWindow.open(map, self.marker);
         });
 
+        //add, remove marker
+        self.removeMarker = () => {
+            self.marker.setMap(null);
+        }
+        
+        self.addMarker = () => {
+            self.marker.setMap(map);
+        }
+
         //utility functions
         self.getMarker = () => {
             return self.marker;
@@ -75,7 +84,7 @@ $(document).ready(function(){
 
         //list of results
         self.listItems = ko.observableArray([]);
-
+        
         //input field
         self.itemToAdd = ko.observable("");
 
@@ -91,26 +100,56 @@ $(document).ready(function(){
         self.searchCategories = ko.observableArray(['Food','Drink','Fun','Shop']);
         self.categoryValue = ko.observable();
 
-        //filter
         self.filterOptions = ko.observableArray(['All','Verified','Unverified'])
-        self.currentFilter = ko.observable('All');
+        self.currentFilter = ko.observable();
 
+         //filter
+         self.filteredList = ko.computed(function(){
+            let filter = self.currentFilter();
+            console.log(filter);
+            if (!filter) {
+                return self.listItems();
+            } else {
+                return ko.utils.arrayFilter(self.listItems(),function(item){
+                    switch (filter) {
+                        case 'Verified':
+                            return (item.getVerified());
+                            break;
+                        case 'Unverified':
+                            return (!item.getVerified())
+                            break;
+                        default:
+                            return true;
+                    }
+                });
+            }
+        },self);
+
+        /*
         self.currentFilter.subscribe(function(latest){
             let filter;
             let originalList = self.listItems();
             let filteredList = originalList.reduce((acc,val) => {
-                switch (self.currentFilter()) {
+                switch (latest) {
                     case 'All':
                         acc.push(val);
+                        val.addMarker();
                         break;
                     case  'Verified':
                         if (val.getVerified()) {
                             acc.push(val);
+                            val.addMarker();
+                        } else {
+                            val.removeMarker();
                         }
                         break;
                     case 'Unverified':
                         if (!val.getVerified()) {
                             acc.push(val);
+                            val.addMarker();
+                        }
+                        else {
+                            val.removeMarker();
                         }
                         break;
                     default:
@@ -119,8 +158,7 @@ $(document).ready(function(){
                 return acc;
             },[]);
             console.log(filteredList);
-            //self.listItems(filteredList);
-        }, self);
+        }, self); */
 
         self.getCategoryID = (category) => {
             switch (category) {
@@ -219,6 +257,7 @@ $(document).ready(function(){
                     //update requestfailed observable
                     self.requestFailed(false);
                 });
+                self.currentFilter('All');
                 map.fitBounds(bounds);
             }).catch((e) => {
                 //end loading spinner
