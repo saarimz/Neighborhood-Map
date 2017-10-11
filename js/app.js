@@ -23,7 +23,10 @@ $(document).ready(function(){
         self.infoWindowTemplate = _.template($("#infoWindowTemplate").html());
 
         self.infoWindow = new google.maps.InfoWindow({
-            content: self.infoWindowTemplate({'name':self.name(),'address':self.address()})
+            content: self.infoWindowTemplate({
+                'name': self.name(),
+                'address': self.address()
+            })
         });
 
         self.marker.addListener('click', () => {
