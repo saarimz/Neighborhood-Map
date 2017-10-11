@@ -25,9 +25,8 @@ body {
 
 
 .input-field {
-    display: inline-block;
-    width: 100%;
 }
+
 
 /*
 #list-input {
@@ -48,24 +47,32 @@ body {
 
 
 #list-input {
-    width: 95%;
+    width: 85%;
     border: 0;
-    margin: 0;
+    margin: 0 auto;
     padding: 0.3vw 0.2vw;
     border-bottom: 2px solid #003459;
-    background: transparent;   
+    background: transparent;
+    margin-right: -4vw;
 }
   
 #clear-sign {
     background: transparent;
     border: none;
     position: relative;
-    right: 5vw;
 }
 
 #list-input:focus {
     outline: 0;
     color: #001021;
+}
+
+#current-loc {
+    border: none;
+    background: transparent;
+    position: relative;
+    font-size: 1.5em;
+    color: #2BDE73;
 }
 
 .btn {

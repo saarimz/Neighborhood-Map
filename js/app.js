@@ -1,8 +1,12 @@
+//wrap in jquery function to let doc load
 $(document).ready(function(){
     
     //model object
     let ListData = function(data){
+        //save reference to the object
         let self = this;
+
+        //data
         self.id = ko.observable(data.id);
         self.name = ko.observable(data.name);
         self.lat = ko.observable(data.location.lat);
@@ -12,6 +16,8 @@ $(document).ready(function(){
             return {lat: self.lat(), lng: self.lng()}
         });
 
+
+        //map data
         self.marker = new google.maps.Marker({
             position: {lat: self.lat(), lng: self.lng()},
             title: self.name(),
@@ -20,8 +26,10 @@ $(document).ready(function(){
             icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
         });
 
+        //set the template
         self.infoWindowTemplate = _.template($("#infoWindowTemplate").html());
 
+        //create infowindow with the template
         self.infoWindow = new google.maps.InfoWindow({
             content: self.infoWindowTemplate({
                 'name': self.name(),
@@ -29,10 +37,12 @@ $(document).ready(function(){
             })
         });
 
+        //show infowindow on click
         self.marker.addListener('click', () => {
             self.infoWindow.open(map, self.marker);
         });
 
+        //utility functions
         self.getMarker = () => {
             return self.marker;
         };
@@ -41,6 +51,7 @@ $(document).ready(function(){
             return self.infoWindow;
         };
 
+        //highlight marker + open infowindow on hover
         self.highlightMarker = () => {
             self.infoWindow.open(map, self.marker);
             self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
@@ -103,6 +114,8 @@ $(document).ready(function(){
             let radius = 1000;
             let intent = 'checkin';
             let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&near=${search}&intent=${intent}&categoryId=${category}&radius=${radius}&limit=${limit}`;
+             //start spinner 
+            self.requestHappening(true);
             self.foursquareSearch(url);
         };
 
@@ -138,6 +151,7 @@ $(document).ready(function(){
         };
 
         self.currentLocationSearch = () => {
+            self.requestHappening(true);
             navigator.geolocation.getCurrentPosition(function(position){
                 //get query params
                 let ll = `${position.coords.latitude},${position.coords.longitude}`
@@ -145,14 +159,14 @@ $(document).ready(function(){
                 let radius = 250;
                 let category = self.getCategoryID(self.categoryValue());
                 let intent = 'browse'
+                //query
                 let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&ll=${ll}&intent=${intent}&categoryId=${category}&radius=${radius}&limit=${limit}`;
+                //call search function
                 self.foursquareSearch(url);
             });
         };
 
         self.foursquareSearch = (url) => {
-            //start spinner 
-            self.requestHappening(true);
             fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
@@ -187,6 +201,5 @@ $(document).ready(function(){
 
     //ko apply bindings
     ko.applyBindings(new ViewModel());
-
 });
 
