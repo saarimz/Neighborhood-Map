@@ -7,7 +7,7 @@ $(document).ready(function(){
         self.name = ko.observable(data.name);
         self.lat = ko.observable(data.location.lat);
         self.lng = ko.observable(data.location.lng);
-        self.address = ko.observable(data.location.address || data.location.formattedAddress);
+        self.address = ko.observable(data.location.address || (data.location.formattedAddress || 'No Address Found'));
         self.coords = ko.computed(() => {
             return {lat: self.lat(), lng: self.lng()}
         });
@@ -16,11 +16,12 @@ $(document).ready(function(){
             position: {lat: self.lat(), lng: self.lng()},
             title: self.name(),
             map: map,
-            animation: google.maps.Animation.DROP
+            animation: google.maps.Animation.DROP,
+            icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
         });
 
         self.infoWindow = new google.maps.InfoWindow({
-            content: self.name()
+            content: `<div><p>${self.name()}</p><p>${self.address()}</p></div>`
         });
 
         self.marker.addListener('click', () => {
@@ -37,11 +38,13 @@ $(document).ready(function(){
 
         self.highlightMarker = () => {
             self.infoWindow.open(map, self.marker);
+            self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
             self.marker.setAnimation(google.maps.Animation.BOUNCE);
         }
 
         self.unhighlightMarker = () => {
             self.infoWindow.close();
+            self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
             self.marker.setAnimation(null);
         }
     }
