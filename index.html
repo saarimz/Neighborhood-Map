@@ -3,105 +3,108 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Neighborhood Map</title>
-        <meta name="description" content="">
+        <title>Nearby Spots</title>
+        <meta name="description" content="A map showing your favorite spots nearby">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link type="text/css" rel="stylesheet" href="css/styles.css">
     </head>
     <body>
-    <div class="container">
-        <!--header-->
         <div class="container">
-            <div class="row text-center">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <h1 id="header">Neighborhood Map</h1>
+            <!--header-->
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <h1 id="header">Nearby Spots</h1>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <hr id="horizontal-rule">
-                </div>
-            </div>
-        </div>
-        <!-- content-->
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="input-view">
-                        <form>
-                            <div class="row text-center">
-                                <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-                                    <div class="input-field">
-                                        <input type="text" id="list-input" placeholder="Eg. Clinton Hill, Brooklyn" data-bind="textInput: itemToAdd">
-                                        <button id="clear-sign" data-bind="click: clearInputField, style: { visibility: hasItem() ? 'visible' : 'hidden'}"><i aria-hidden="true" class="fa fa-times"></i></button>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2" style="border: 3px solid purple">
-                                    <label>
-                                        Limit
-                                    </label>
-                                    <select name="limit-select" id="limit-select" data-bind="options: searchLimit, value: limitValue">
-                                    </select>
-                                </div>
-                                <div class="col-xs-6 col-sm-1 col-md-1 col-lg-1" style="border: 3px solid yellow">
-                                    <button type="submit" id="current-loc" data-bind="click: currentLocationSearch"><i class="fa fa-location-arrow" aria-hidden="true"></i></button>
-                                </div>
-                            </div>
-                            <div class="row button-container">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <button class="btn btn-primary" type="submit" id="add-button" data-bind="click: search, enable: hasItem">Search</button>
-                                    <button class="btn btn-danger" type="submit" id="clear-button" data-bind="click: clearList, enable: isNotEmpty">Clear</button>
-                                </div>
-                            </div>
-                        </form>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <hr id="horizontal-rule">
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                    <div data-bind="if: isNotEmpty" class="list-view">
-                        <ul class="main-list" data-bind="foreach: listItems">
-                            <li class="list-item">
-                                <div class="list-text">
-                                    <div class="text-part">
-                                        <p class="list-comp" id="item-name" data-bind = "text: name"></p>
-                                        <p class="list-comp" id="item-address" data-bind = "text: address"></p>
+            <!-- content-->
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="input-view">
+                            <form>
+                                <div class="row text-center">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="input-field">
+                                            <input type="text" id="list-input" placeholder="Eg. Clinton Hill, Brooklyn" data-bind="textInput: itemToAdd">
+                                            <button id="clear-sign" data-bind="click: clearInputField, style: { visibility: hasItem() ? 'visible' : 'hidden'}"><i aria-hidden="true" class="fa fa-times"></i></button>
+                                        </div>
                                     </div>
-                                    <i class="fa fa-minus delete-button" data-bind = "click: $root.removeItem"></i>
                                 </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div data-bind="if: requestFailed" class="text-center">
-                        <div class="not-found">
-                            <h3>⚠ Not Found</h3>
-                            <img class="img img-responsive" src="https://media.giphy.com/media/A01J1PFAXrvLa/giphy.gif" alt="not-found-gif"/>
-                            <p>Please try searching for something else.</p>
+                                <div class="row text-center">
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border: 3px solid purple">
+                                        <label>Limit</label>
+                                        <select name="limit-select" id="limit-select" data-bind="options: searchLimit, value: limitValue"></select>
+                                    </div>
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border: 3px solid pink">
+                                        <label>Category</label>
+                                        <select name="category-select" id="category-select" data-bind="options: searchCategories, value: categoryValue"></select>
+                                    </div>
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border: 3px solid yellow">
+                                        <button type="submit" id="current-loc" data-bind="click: currentLocationSearch"><i class="fa fa-location-arrow" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                                <div class="row button-container">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <button class="btn btn-primary" type="submit" id="add-button" data-bind="click: search, enable: hasItem">Search</button>
+                                        <button class="btn btn-danger" type="submit" id="clear-button" data-bind="click: clearList, enable: isNotEmpty">Clear</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div data-bind="visible: requestHappening" class="text-center">
-                        <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
-                    </div>
                 </div>
-                <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-                    <div id="map"></div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <div data-bind="if: isNotEmpty" class="list-view">
+                            <ul class="main-list" data-bind="foreach: listItems">
+                                <li class="list-item" data-bind="event: {mouseover: highlightMarker, mouseout: unhighlightMarker}">
+                                    <div class="list-text">
+                                        <div class="text-part">
+                                            <p class="list-comp" id="item-name" data-bind = "text: name"></p>
+                                            <p class="list-comp" id="item-address" data-bind = "text: address"></p>
+                                        </div>
+                                        <i class="fa fa-minus delete-button" data-bind = "click: $root.removeItem"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div data-bind="if: requestFailed" class="text-center">
+                            <div class="not-found">
+                                <h3>⚠ Not Found</h3>
+                                <img class="img img-responsive" src="https://media.giphy.com/media/A01J1PFAXrvLa/giphy.gif" alt="not-found-gif"/>
+                                <p>Please try searching for something else.</p>
+                            </div>
+                        </div>
+                        <div data-bind="visible: requestHappening" class="text-center">
+                            <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                        <div id="map"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-  
-
+        <!--javascript -->
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-debug.js"></script>
+        <!--app.js-->
         <script type="text/javascript" src="js/app.js"></script>
+        <!--map init-->
         <script type="text/javascript">
-        
         let map;
         function initMap(){
             map = new google.maps.Map(document.getElementById("map"),{
@@ -109,8 +112,8 @@
                 zoom: 12
             });
         }
-
         </script>
+        <!--load map from Google APIs-->
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=geometry&key=AIzaSyA550azd_vp2lj3GFbsGTci_pYvHGitB30&callback=initMap" async defer></script>
     </body>
 </html>

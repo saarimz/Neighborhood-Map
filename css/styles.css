@@ -48,7 +48,7 @@ body {
 
 
 #list-input {
-    width: 92%;
+    width: 95%;
     border: 0;
     margin: 0;
     padding: 0.3vw 0.2vw;
@@ -60,7 +60,6 @@ body {
     background: transparent;
     border: none;
     position: relative;
-    width: 7%;
     right: 5vw;
 }
 

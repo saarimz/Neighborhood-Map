@@ -18,14 +18,42 @@ $(document).ready(function(){
             map: map,
             animation: google.maps.Animation.DROP
         });
+
+        self.infoWindow = new google.maps.InfoWindow({
+            content: self.name()
+        });
+
+        self.marker.addListener('click', () => {
+            self.infoWindow.open(map, self.marker);
+        });
+
+        self.getMarker = () => {
+            return self.marker;
+        };
+
+        self.getInfoWindow = () =>{
+            return self.infoWindow;
+        };
+
+        self.highlightMarker = () => {
+            self.infoWindow.open(map, self.marker);
+            self.marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+
+        self.unhighlightMarker = () => {
+            self.infoWindow.close();
+            self.marker.setAnimation(null);
+        }
     }
 
     //VM
     let ViewModel = function() {
         let self = this;
 
+        //list of results
         self.listItems = ko.observableArray([]);
 
+        //input field
         self.itemToAdd = ko.observable("");
 
         //search limit bar
@@ -36,17 +64,43 @@ $(document).ready(function(){
         self.requestHappening = ko.observable(false);
         self.requestFailed = ko.observable(false);
 
+        //search category
+        self.searchCategories = ko.observableArray(['Food','Drink','Fun','Shop']);
+        self.categoryValue = ko.observable();
+
+        self.getCategoryID = (category) => {
+            switch (category) {
+                case 'Food':
+                    return '4d4b7105d754a06374d81259';
+                    break;
+                case 'Drink':
+                    return '4d4b7105d754a06376d81259';
+                    break;
+                case 'Fun':
+                    return '4d4b7105d754a06377d81259';
+                    break;
+                case 'Shop':
+                    return '4d4b7105d754a06378d81259';
+                    break;
+                default:
+                    return null;
+            }
+        };
+
         //search bar search
         self.search = () => {
             let search = self.itemToAdd();
             let limit = self.limitValue();
-            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=${limit}&near=${search}`;
+            let category = self.getCategoryID(self.categoryValue());
+            let radius = 1000;
+            let intent = 'checkin';
+            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&near=${search}&intent=${intent}&categoryId=${category}&radius=${radius}&limit=${limit}`;
             self.foursquareSearch(url);
-        }
+        };
 
         self.clearInputField = () => {
             self.itemToAdd(null);
-        }
+        };
 
         self.clearList = () => {
             //remvoe markers
@@ -57,7 +111,7 @@ $(document).ready(function(){
             self.clearInputField();
             //remove item from list
             self.listItems.removeAll();
-        }
+        };
 
         self.hasItem = ko.computed(() => {
             return (self.itemToAdd());
@@ -77,9 +131,13 @@ $(document).ready(function(){
 
         self.currentLocationSearch = () => {
             navigator.geolocation.getCurrentPosition(function(position){
+                //get query params
                 let ll = `${position.coords.latitude},${position.coords.longitude}`
                 let limit = self.limitValue();
-                let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&limit=${limit}&ll=${ll}`;
+                let radius = 250;
+                let category = self.getCategoryID(self.categoryValue());
+                let intent = 'browse'
+                let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&ll=${ll}&intent=${intent}&categoryId=${category}&radius=${radius}&limit=${limit}`;
                 self.foursquareSearch(url);
             });
         };
@@ -91,7 +149,9 @@ $(document).ready(function(){
                 return response.json();
             }).then((data) => {
                 let bounds = new google.maps.LatLngBounds();
+                let currentSearch = self.itemToAdd();
                 self.clearList();
+                self.itemToAdd(currentSearch);
                 data.response.venues.forEach((venue) => {
                     //signal end of request for getting rid of spinener
                     self.requestHappening(false);
