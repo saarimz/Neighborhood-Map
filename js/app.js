@@ -229,14 +229,17 @@ $(document).ready(function(){
             }).then((data) => {
                 let bounds = new google.maps.LatLngBounds();
                 let currentSearch = self.itemToAdd();
+                let venueDataPromises = [];
+                let venues = []
                 self.clearList();
                 self.itemToAdd(currentSearch);
                 data.response.venues.forEach((venue) => {
                     //signal end of request for getting rid of spinener
                     self.requestHappening(false);
                     //TO DOdo request for additional venue details
-                    //self.getVenueData(bounds,venue,venue.id);
-                    
+                    venues.push(venue);
+                    venueDataPromises.push(fetch(`https://api.foursquare.com/v2/venues/${venue.id}?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS`));
+                    /*
                     //create venue obj
                     let venueObj = new ListData(venue);
                     //push to array
@@ -244,10 +247,19 @@ $(document).ready(function(){
                     //extend the bounds
                     bounds.extend(venueObj.marker.position);
                     //update requestfailed observable
-                    self.requestFailed(false);
+                    self.requestFailed(false); */
+                });
+                Promise.all(venueDataPromises).then((response) => {
+                    return Promise.all(response.map(val => val.json()));
+                }).then((data) => {
+                    let arr = data.map(val => val.response.venue);
+                    console.log(venues[0]);
+                    console.log(arr[0]);
+                    //next step is to combine these two arrays into one object (or use the final promise result /venue to create listings)
                 });
                 self.currentFilter('All');
                 map.fitBounds(bounds);
+            
             }).catch((e) => {
                 //end loading spinner
                 self.requestHappening(false);
