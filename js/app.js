@@ -16,12 +16,12 @@ $(document).ready(function(){
             return {lat: self.lat(), lng: self.lng()}
         });
         self.verified = ko.observable(data.verified);
+        self.tags = ko.observableArray(data.tags);
 
         //venue data
-        //console.log(self.rating);
-        self.rating = ko.observable(data.rating);
-        self.likes = ko.observable(data.likes);
-        self.url = ko.observable(data.url);
+        self.rating = ko.observable(data.rating || 'N/A');
+        self.likes = ko.observable(data.likes.count || 0);
+        self.url = ko.observable(data.canonicalUrl);
         self.price = ko.observable(data.price);
 
         //map data
@@ -40,7 +40,10 @@ $(document).ready(function(){
             content: self.infoWindowTemplate({
                 'name': self.name(),
                 'address': self.address(),
-                'rating': self.rating()
+                'rating': self.rating(),
+                'likes' : self.likes(),
+                'url' : self.url(),
+                'price' : self.price()
             })
         });
 
@@ -222,43 +225,45 @@ $(document).ready(function(){
                 self.foursquareSearch(url);
             });
         };
-
+        
+        //foursquare search
         self.foursquareSearch = (url) => {
             fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
-                let bounds = new google.maps.LatLngBounds();
                 let currentSearch = self.itemToAdd();
                 let venueDataPromises = [];
-                let venues = []
                 self.clearList();
                 self.itemToAdd(currentSearch);
                 data.response.venues.forEach((venue) => {
-                    //signal end of request for getting rid of spinener
-                    self.requestHappening(false);
-                    //TO DOdo request for additional venue details
-                    venues.push(venue);
+                    //put request for venue information in an array
                     venueDataPromises.push(fetch(`https://api.foursquare.com/v2/venues/${venue.id}?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS`));
-                    /*
-                    //create venue obj
-                    let venueObj = new ListData(venue);
-                    //push to array
-                    self.listItems.push(venueObj);
-                    //extend the bounds
-                    bounds.extend(venueObj.marker.position);
-                    //update requestfailed observable
-                    self.requestFailed(false); */
                 });
+                //execute after all promises have resolved
                 Promise.all(venueDataPromises).then((response) => {
                     return Promise.all(response.map(val => val.json()));
                 }).then((data) => {
+                    //signal end of request for getting rid of spinener
+                    self.requestHappening(false);
+                    //create new bounds object for the request
+                    let bounds = new google.maps.LatLngBounds();    
+                    //simplify the response object              
                     let arr = data.map(val => val.response.venue);
-                    console.log(venues[0]);
-                    console.log(arr[0]);
-                    //next step is to combine these two arrays into one object (or use the final promise result /venue to create listings)
+                    //iterate through arr creating new objects and adding them to array
+                    arr.forEach((venue) => {
+                        //create venue obj
+                        let venueObj = new ListData(venue);
+                        //push to array
+                        self.listItems.push(venueObj);
+                        //extend the bounds
+                        bounds.extend(venueObj.marker.position);
+                    });
+                    //update requestfailed observable
+                    self.requestFailed(false); 
+                    //fit map bounds
+                    map.fitBounds(bounds);
                 });
                 self.currentFilter('All');
-                map.fitBounds(bounds);
             
             }).catch((e) => {
                 //end loading spinner
@@ -269,58 +274,9 @@ $(document).ready(function(){
                 self.requestFailed(true);
                 //log in console
                 console.log(e);
-            });
-            
-            /*.then((resultArr) => {
-                for (item of resultArr) {
-                    let venueID = item.id();
-                    //console.log(item.id());
-                    let responseObj = self.getVenueData(venueID);
-                    item.likes(responseObj.likes);
-                    item.price(responseObj.price);
-                    item.rating(responseObj.rating);
-                    item.url(responseObj.url);
-                }
-            }).catch((e) => {
-                console.log(e);
-                console.log("Error making venuedata request")
-            })*/
+            });    
         };
-        /*
-        self.getVenueData = (bounds,venue,id) => {
-            let url = `https://api.foursquare.com/v2/venues/${id}?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS`;
-            let resultObj = {};
-            fetch(url).then((response) => {
-                return response.json();
-            }).then((data) => {
-                let responseData = data.response.venue
-                resultObj.likes = responseData.likes.count;
-                resultObj.rating = responseData.rating;
-                resultObj.price = responseData.price.tier;
-                resultObj.url = responseData.shortUrl;
-                return resultObj;
-            }).catch((e) => {
-                console.log(e);
-                console.log("Error getting venue data");
-            }).then((result) => {
-                //add the additional keys to venue
-                venue.likes = result.likes || '';
-                venue.price = result.price || '';
-                venue.url = result.url || '';
-                venue.rating = result.rating || '';
-                //create venue obj
-                let venueObj = new ListData(venue);
-                //push to array
-                self.listItems.push(venueObj);
-                //extend the bounds
-                bounds.extend(venueObj.marker.position);
-                //update requestfailed observable
-                self.requestFailed(false);
-            });
-        };*/
-
-    } 
-
+    };
     //ko apply bindings
     ko.applyBindings(new ViewModel());
 });
