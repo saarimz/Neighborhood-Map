@@ -110,7 +110,7 @@ $(document).ready(function(){
         self.searchCategories = ko.observableArray(['Food','Drink','Fun','Shop']);
         self.categoryValue = ko.observable();
 
-        self.filterOptions = ko.observableArray(['All','Verified','Unverified'])
+        self.filterOptions = ko.observableArray(['All Results','8.0 or above','More than 100 likes','Verified by Owner','Poorly Rated']);
         self.currentFilter = ko.observable();
 
          //filter
@@ -121,7 +121,7 @@ $(document).ready(function(){
             } else {
                 return ko.utils.arrayFilter(self.listItems(),function(item){
                     switch (filter) {
-                        case 'Verified':
+                        case 'Verified by Owner':
                             if (item.getVerified()) {
                                 item.marker.setMap(map);
                                 return true;
@@ -130,8 +130,26 @@ $(document).ready(function(){
                                 return false;
                             }
                             break;
-                        case 'Unverified':
-                            if (!item.getVerified()) {
+                        case '8.0 or above':
+                            if (item.rating() >= 8.0) {
+                                item.marker.setMap(map);
+                                return true;
+                            } else {
+                                item.marker.setMap(null);
+                                return false;
+                            }
+                            break;
+                        case 'More than 100 likes':
+                            if (item.likes() >= 100) {
+                                item.marker.setMap(map);
+                                return true;
+                            } else {
+                                item.marker.setMap(null);
+                                return false;
+                            }
+                            break;
+                        case 'Poorly Rated':
+                            if (item.rating <= 6.0) {
                                 item.marker.setMap(map);
                                 return true;
                             } else {
@@ -272,7 +290,7 @@ $(document).ready(function(){
                 self.clearInputField();
                 //update requestfailed observable
                 self.requestFailed(true);
-                //log in console
+                //log error in console
                 console.log(e);
             });    
         };
