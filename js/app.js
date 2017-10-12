@@ -17,6 +17,13 @@ $(document).ready(function(){
         });
         self.verified = ko.observable(data.verified);
 
+        //venue data
+        //console.log(self.rating);
+        self.rating = ko.observable(data.rating);
+        self.likes = ko.observable(data.likes);
+        self.url = ko.observable(data.url);
+        self.price = ko.observable(data.price);
+
         //map data
         self.marker = new google.maps.Marker({
             position: {lat: self.lat(), lng: self.lng()},
@@ -32,7 +39,8 @@ $(document).ready(function(){
         self.infoWindow = new google.maps.InfoWindow({
             content: self.infoWindowTemplate({
                 'name': self.name(),
-                'address': self.address()
+                'address': self.address(),
+                'rating': self.rating()
             })
         });
 
@@ -226,9 +234,14 @@ $(document).ready(function(){
                 data.response.venues.forEach((venue) => {
                     //signal end of request for getting rid of spinener
                     self.requestHappening(false);
+                    //TO DOdo request for additional venue details
+                    //self.getVenueData(bounds,venue,venue.id);
+                    
                     //create venue obj
-                    let venueObj = new ListData(venue)
+                    let venueObj = new ListData(venue);
+                    //push to array
                     self.listItems.push(venueObj);
+                    //extend the bounds
                     bounds.extend(venueObj.marker.position);
                     //update requestfailed observable
                     self.requestFailed(false);
@@ -246,7 +259,54 @@ $(document).ready(function(){
                 console.log(e);
             });
             
+            /*.then((resultArr) => {
+                for (item of resultArr) {
+                    let venueID = item.id();
+                    //console.log(item.id());
+                    let responseObj = self.getVenueData(venueID);
+                    item.likes(responseObj.likes);
+                    item.price(responseObj.price);
+                    item.rating(responseObj.rating);
+                    item.url(responseObj.url);
+                }
+            }).catch((e) => {
+                console.log(e);
+                console.log("Error making venuedata request")
+            })*/
         };
+        /*
+        self.getVenueData = (bounds,venue,id) => {
+            let url = `https://api.foursquare.com/v2/venues/${id}?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS`;
+            let resultObj = {};
+            fetch(url).then((response) => {
+                return response.json();
+            }).then((data) => {
+                let responseData = data.response.venue
+                resultObj.likes = responseData.likes.count;
+                resultObj.rating = responseData.rating;
+                resultObj.price = responseData.price.tier;
+                resultObj.url = responseData.shortUrl;
+                return resultObj;
+            }).catch((e) => {
+                console.log(e);
+                console.log("Error getting venue data");
+            }).then((result) => {
+                //add the additional keys to venue
+                venue.likes = result.likes || '';
+                venue.price = result.price || '';
+                venue.url = result.url || '';
+                venue.rating = result.rating || '';
+                //create venue obj
+                let venueObj = new ListData(venue);
+                //push to array
+                self.listItems.push(venueObj);
+                //extend the bounds
+                bounds.extend(venueObj.marker.position);
+                //update requestfailed observable
+                self.requestFailed(false);
+            });
+        };*/
+
     } 
 
     //ko apply bindings
