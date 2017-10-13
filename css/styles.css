@@ -24,27 +24,6 @@ body {
 /*input / search bar */
 
 
-.input-field {
-}
-
-
-/*
-#list-input {
-    width: 95%;
-    border: 0;
-    border: 2px solid #003459;
-    background: transparent;   
-}
-
-#clear-sign {
-    width: 5%;
-    height: 100%;
-    margin-left: -30px;
-    background: transparent;
-    border: none;
-    border: 1px solid black;
-} */
-
 
 #list-input {
     width: 85%;
@@ -164,6 +143,19 @@ ul,li {
     font-size: 1em;
 }
 
+#item-rating {
+    font-weight: normal;
+    font-size: 1.3em;
+}
+
+.rating-number {
+    font-weight: bold;
+    color: #F7F7F7;
+    border: 1px solid #000000;
+    padding: 0.3vw;
+    border-radius: 20%;
+}
+
 .delete-button {
     width: 10%;
     padding: 1%;
@@ -194,8 +186,21 @@ ul,li {
     justify-content: space-between;
 }
 
-.search-parameters label{
+.search-parameters__param {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.search-parameters__param label{
     font-size: 0.8em;
+    display: flex;
+    padding: 0px 1vw;
+}
+
+.search-parameters__param select{
+    display: flex;
 }
 /* Filter section */
 

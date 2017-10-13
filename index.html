@@ -43,15 +43,15 @@
                                     </div>
                                 </div>
                                 <div class="row text-center search-parameters">
-                                    <div>
+                                    <div class="search-parameters__param">
                                         <label>Limit</label>
                                         <select name="limit-select" id="limit-select" data-bind="options: searchLimit, value: limitValue"></select>
                                     </div>
-                                    <div>
+                                    <div class="search-parameters__param">
                                         <label>Category</label>
                                         <select name="category-select" id="category-select" data-bind="options: searchCategories, value: categoryValue"></select>
                                     </div>
-                                    <div>
+                                    <div class="search-parameters__param">
                                         <label>Distance</label>
                                         <select name="distance-select" id="distance-select" data-bind="options: searchDistance, value: searchDistanceValue"></select>
                                     </div>
@@ -95,6 +95,7 @@
                                     <div class="list-text">
                                         <div class="text-part">
                                             <a data-bind="attr: { href: url }" target="_blank"><p class="list-comp" id="item-name" data-bind = "text: name"></p></a>
+                                            <p class="list-comp" id="item-rating">Rating:&nbsp;<span class="rating-number" data-bind="text: rating, style: { 'background-color': setColor() }"></span></p>
                                             <p class="list-comp" id="item-address" data-bind = "text: address"></p>
                                         </div>
                                         <i class="fa fa-minus delete-button" data-bind = "click: $root.removeItem"></i>

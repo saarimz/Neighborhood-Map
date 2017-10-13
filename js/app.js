@@ -19,10 +19,13 @@ $(document).ready(function(){
         self.tags = ko.observableArray(data.tags);
 
         //venue data
-        self.rating = ko.observable(data.rating || 'N/A');
+        self.rating = ko.observable(data.rating.toFixed(1) || 'N/A');
         self.likes = ko.observable(data.likes.count || 0);
         self.url = ko.observable(data.canonicalUrl);
         self.price = ko.observable(data.price);
+
+        //rating color
+        self.ratingColor = ko.observable('');
 
         //map data
         self.marker = new google.maps.Marker({
@@ -86,6 +89,26 @@ $(document).ready(function(){
             self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
             self.marker.setAnimation(null);
         };
+
+        
+        //set color of rating
+        self.setColor = ko.computed(() => {
+            if (self.rating() == 'N/A') {
+                self.ratingColor('#949494');
+            } else if (self.rating() >= 9) {
+                self.ratingColor('#42e700');
+            } else if (self.rating() >= 7) {
+                self.ratingColor('#6fab57');
+            } else if (self.rating() >= 6) {
+                self.ratingColor('#dfb531');
+            } else if (self.rating() >= 4) {
+                self.ratingColor('##c57028');
+            } else if (self.rating() >= 0) {
+                self.ratingColor('#c52828');
+            } 
+            return self.ratingColor();
+        },self); 
+        
     }
 
     //VM
@@ -115,7 +138,7 @@ $(document).ready(function(){
         self.searchDistanceValue = ko.observable();
 
         //results filters
-        self.filterOptions = ko.observableArray(['All results','8.0 or above','More than 100 likes','Verified by owner','Poorly rated']);
+        self.filterOptions = ko.observableArray(['All results','8.0 or above','More than 100 likes','Verified by owner','Highly rated','Poorly rated']);
         self.currentFilter = ko.observable();
 
          //filter
@@ -162,6 +185,15 @@ $(document).ready(function(){
                                 return false;
                             }
                             break;
+                        case 'Highly rated':
+                            if (item.rating() > 9.0) {
+                                item.marker.setMap(map);
+                                return true;
+                            }
+                            else {
+                                item.marker.setMap(null);
+                                return false;
+                            }
                         case 'All results':
                             item.marker.setMap(map);
                             return true;
