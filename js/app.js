@@ -13,7 +13,7 @@ $(document).ready(function(){
         self.lng = ko.observable(data.location.lng);
         self.address = ko.observable(data.location.address || (data.location.formattedAddress || 'No Address Found'));
         self.coords = ko.computed(() => {
-            return {lat: self.lat(), lng: self.lng()}
+            return {lat: self.lat(), lng: self.lng()};
         });
         self.verified = ko.observable(data.verified);
         self.tags = ko.observableArray(data.tags);
@@ -58,11 +58,11 @@ $(document).ready(function(){
         //add, remove marker
         self.removeMarker = () => {
             self.marker.setMap(null);
-        }
+        };
         
         self.addMarker = () => {
             self.marker.setMap(map);
-        }
+        };
 
         //utility functions
         self.getMarker = () => {
@@ -109,7 +109,7 @@ $(document).ready(function(){
             return self.ratingColor();
         },self); 
         
-    }
+    };
 
     //VM
     let ViewModel = function() {
@@ -194,6 +194,7 @@ $(document).ready(function(){
                                 item.marker.setMap(null);
                                 return false;
                             }
+                            break;
                         case 'All results':
                             item.marker.setMap(map);
                             return true;
@@ -222,19 +223,21 @@ $(document).ready(function(){
         };
 
         self.getRadius = (distance) => {
+            let radius;
             switch (distance) {
                 case 'Walking (0.5 mi.)':
-                    return 805;
+                    radius = 805;
                     break;
                 case 'Biking (1 mi.)':
-                    return 1609;
+                    radius = 1609;
                     break;
                 case 'Ubering (2 mi.)':
-                    return 3219;
+                    radius = 3219;
                     break;
                 case 'Driving (5 mi.)':
-                    return 8047;
+                    radius = 8047;
             }
+            return radius;
         };
 
         //search bar search
@@ -287,11 +290,11 @@ $(document).ready(function(){
             self.requestHappening(true);
             navigator.geolocation.getCurrentPosition(function(position){
                 //get query params
-                let ll = `${position.coords.latitude},${position.coords.longitude}`
+                let ll = `${position.coords.latitude},${position.coords.longitude}`;
                 let limit = self.limitValue();
                 let radius = self.getRadius(self.searchDistanceValue());
                 let category = self.getCategoryID(self.categoryValue());
-                let intent = 'browse'
+                let intent = 'browse';
                 let CLIENT_ID = `KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS`;
                 let CLIENT_SECRET = `15MJMCYXSVDMDLPJ44FWAIRU31PKWZFLC5FDCH0VKNVN1QKT`;
                 //query
