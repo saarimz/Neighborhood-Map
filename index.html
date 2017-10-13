@@ -42,14 +42,18 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row text-center">
-                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border: 3px solid purple">
+                                <div class="row text-center search-parameters">
+                                    <div>
                                         <label>Limit</label>
                                         <select name="limit-select" id="limit-select" data-bind="options: searchLimit, value: limitValue"></select>
                                     </div>
-                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border: 3px solid pink">
+                                    <div>
                                         <label>Category</label>
                                         <select name="category-select" id="category-select" data-bind="options: searchCategories, value: categoryValue"></select>
+                                    </div>
+                                    <div>
+                                        <label>Distance</label>
+                                        <select name="distance-select" id="distance-select" data-bind="options: searchDistance, value: searchDistanceValue"></select>
                                     </div>
                                 </div>
                                 <div class="row button-container">
@@ -68,10 +72,11 @@
                     </div>
                 </div>
             </div>
-            <div class="container" data-bind="visible: isNotEmpty">
+            <!--<div class="container" data-bind="visible: isNotEmpty">-->
+            <div class="container">
                 <div class="row">
-                    <div class="col-md-12">
-                        <label>Filters</label>
+                    <div class="col-md-12 filter-dropdown">
+                        <label>Filter</label>
                         <select data-bind="options: filterOptions, value: currentFilter"></select>
                     </div>
                 </div>

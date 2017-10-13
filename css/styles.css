@@ -73,6 +73,11 @@ body {
     position: relative;
     font-size: 1.5em;
     color: #2BDE73;
+    filter: invert(0%);
+}
+
+#current-loc:hover {
+    filter: invert(100%);
 }
 
 .btn {
@@ -176,6 +181,42 @@ ul,li {
 
 .hidden {
     visibility: hidden;
+}
+
+/*Search Parameters section*/
+
+.search-parameters {
+    padding: 1vw 0;
+    width: 100%;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.search-parameters label{
+    font-size: 0.8em;
+}
+/* Filter section */
+
+.filter-dropdown {
+    display: inline;
+}
+
+.filter-dropdown label {
+    font-size: 1em;
+}
+
+.filter-dropdown select {
+    border: 1px solid black;
+    box-shadow: none;
+    background: transparent;
+    background-image: none;
+    width: 50%;
+}
+
+.filter-dropdown select:focus {
+    outline: none;
 }
 
 /*Not Found Modal */

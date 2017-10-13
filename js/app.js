@@ -110,7 +110,12 @@ $(document).ready(function(){
         self.searchCategories = ko.observableArray(['Food','Drink','Fun','Shop']);
         self.categoryValue = ko.observable();
 
-        self.filterOptions = ko.observableArray(['All Results','8.0 or above','More than 100 likes','Verified by Owner','Poorly Rated']);
+        //search distance
+        self.searchDistance = ko.observableArray(['Walking (0.5 mi.)','Biking (1 mi.)','Ubering (2 mi.)','Driving (5 mi.)']);
+        self.searchDistanceValue = ko.observable();
+
+        //results filters
+        self.filterOptions = ko.observableArray(['All results','8.0 or above','More than 100 likes','Verified by owner','Poorly rated']);
         self.currentFilter = ko.observable();
 
          //filter
@@ -121,7 +126,7 @@ $(document).ready(function(){
             } else {
                 return ko.utils.arrayFilter(self.listItems(),function(item){
                     switch (filter) {
-                        case 'Verified by Owner':
+                        case 'Verified by owner':
                             if (item.getVerified()) {
                                 item.marker.setMap(map);
                                 return true;
@@ -148,8 +153,8 @@ $(document).ready(function(){
                                 return false;
                             }
                             break;
-                        case 'Poorly Rated':
-                            if (item.rating <= 6.0) {
+                        case 'Poorly rated':
+                            if (item.rating() <= 6.0) {
                                 item.marker.setMap(map);
                                 return true;
                             } else {
@@ -157,7 +162,7 @@ $(document).ready(function(){
                                 return false;
                             }
                             break;
-                        default:
+                        case 'All results':
                             item.marker.setMap(map);
                             return true;
                     }
@@ -184,14 +189,32 @@ $(document).ready(function(){
             }
         };
 
+        self.getRadius = (distance) => {
+            switch (distance) {
+                case 'Walking (0.5 mi.)':
+                    return 805;
+                    break;
+                case 'Biking (1 mi.)':
+                    return 1609;
+                    break;
+                case 'Ubering (2 mi.)':
+                    return 3219;
+                    break;
+                case 'Driving (5 mi.)':
+                    return 8047;
+            }
+        };
+
         //search bar search
         self.search = () => {
             let search = self.itemToAdd();
             let limit = self.limitValue();
             let category = self.getCategoryID(self.categoryValue());
-            let radius = 1000;
+            let radius = self.getRadius(self.searchDistanceValue());
             let intent = 'checkin';
-            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&near=${search}&intent=${intent}&categoryId=${category}&radius=${radius}&limit=${limit}`;
+            let CLIENT_ID = `KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS`;
+            let CLIENT_SECRET = `15MJMCYXSVDMDLPJ44FWAIRU31PKWZFLC5FDCH0VKNVN1QKT`;
+            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=${CLIENT_SECRET}&client_id=${CLIENT_ID}&near=${search}&intent=${intent}&categoryId=${category}&radius=${radius}&limit=${limit}`;
              //start spinner 
             self.requestHappening(true);
             self.foursquareSearch(url);
@@ -234,11 +257,13 @@ $(document).ready(function(){
                 //get query params
                 let ll = `${position.coords.latitude},${position.coords.longitude}`
                 let limit = self.limitValue();
-                let radius = 250;
+                let radius = self.getRadius(self.searchDistanceValue());
                 let category = self.getCategoryID(self.categoryValue());
                 let intent = 'browse'
+                let CLIENT_ID = `KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS`;
+                let CLIENT_SECRET = `15MJMCYXSVDMDLPJ44FWAIRU31PKWZFLC5FDCH0VKNVN1QKT`;
                 //query
-                let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS&ll=${ll}&intent=${intent}&categoryId=${category}&radius=${radius}&limit=${limit}`;
+                let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=${CLIENT_SECRET}&client_id=${CLIENT_ID}&ll=${ll}&intent=${intent}&categoryId=${category}&radius=${radius}&limit=${limit}`;
                 //call search function
                 self.foursquareSearch(url);
             });
@@ -255,7 +280,9 @@ $(document).ready(function(){
                 self.itemToAdd(currentSearch);
                 data.response.venues.forEach((venue) => {
                     //put request for venue information in an array
-                    venueDataPromises.push(fetch(`https://api.foursquare.com/v2/venues/${venue.id}?v=20171006&client_secret=BYTSHE2RSR3PRO0EQASUDEMRJMIWBKQHT40XR30O4KHUHH4P&client_id=KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS`));
+                    let CLIENT_ID = `KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS`;
+                    let CLIENT_SECRET = `15MJMCYXSVDMDLPJ44FWAIRU31PKWZFLC5FDCH0VKNVN1QKT`;
+                    venueDataPromises.push(fetch(`https://api.foursquare.com/v2/venues/${venue.id}?v=20171006&client_secret=${CLIENT_SECRET}&client_id=${CLIENT_ID}`));
                 });
                 //execute after all promises have resolved
                 Promise.all(venueDataPromises).then((response) => {
