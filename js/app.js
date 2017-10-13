@@ -204,22 +204,24 @@ $(document).ready(function(){
         },self);
 
         self.getCategoryID = (category) => {
+            let categoryID;
             switch (category) {
                 case 'Food':
-                    return '4d4b7105d754a06374d81259';
+                    categoryID = '4d4b7105d754a06374d81259';
                     break;
                 case 'Drink':
-                    return '4d4b7105d754a06376d81259';
+                    categoryID = '4d4b7105d754a06376d81259';
                     break;
                 case 'Fun':
-                    return '4d4b7105d754a06377d81259';
+                    categoryID = '4d4b7105d754a06377d81259';
                     break;
                 case 'Shop':
-                    return '4d4b7105d754a06378d81259';
+                    categoryID = '4d4b7105d754a06378d81259';
                     break;
                 default:
-                    return null;
+                    categoryID = null;
             }
+            return categoryID;
         };
 
         self.getRadius = (distance) => {
