@@ -56,11 +56,11 @@ $(document).ready(function(){
         });
 
         self.marker.addListener('mouseover', () => {
-            self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
+            self.highlightMarker();
         });
 
         self.marker.addListener('mouseout', () => {
-            self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+            self.unhighlightMarker();
         });
 
         //infowindow close
@@ -300,7 +300,8 @@ $(document).ready(function(){
 
          //search bar search
          self.search = () => {
-            let search = self.itemToAdd();
+            //set a default when search is called the first time
+            let search = self.itemToAdd() || 'West Village';
             let limit = self.limitValue();
             let category = self.getCategoryID(self.categoryValue());
             let radius = self.getRadius(self.searchDistanceValue());
@@ -389,6 +390,10 @@ $(document).ready(function(){
         };
     };
     //ko apply bindings
-    ko.applyBindings(new ViewModel());
+    let viewModel = new ViewModel();
+    ko.applyBindings(viewModel);
+
+    //initial serach
+    viewModel.search();
 });
 
