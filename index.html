@@ -6,9 +6,9 @@
         <title>Nearby Spots</title>
         <meta name="description" content="A map showing your favorite spots nearby">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link type="text/css" rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/styles.css">
     </head>
     <body>
         <div class="container">
@@ -128,24 +128,16 @@
             </div>
         </script>
         <!--javascript -->
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-debug.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-        <!--app.js-->
-        <script type="text/javascript" src="js/app.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-debug.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
         <!--map init-->
-        <script type="text/javascript">
-        let map;
-        function initMap(){
-            map = new google.maps.Map(document.getElementById("map"),{
-                center: {lat: 40.7134, lng: -74.0055},
-                zoom: 12
-            });
-        }
-        </script>
+        <script src="js/map.js"></script>
+        <!--app.js-->
+        <script src="js/app.js"></script>
         <!--load map from Google APIs-->
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=geometry&key=AIzaSyA550azd_vp2lj3GFbsGTci_pYvHGitB30&callback=initMap" async defer></script>
+        <script onerror="mapError()" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=geometry&key=AIzaSyA550azd_vp2lj3GFbsGTci_pYvHGitB30&callback=initMap" async defer></script>
     </body>
 </html>
