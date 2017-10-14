@@ -19,7 +19,7 @@ $(document).ready(function(){
         self.tags = ko.observableArray(data.tags);
 
         //venue data
-        self.rating = ko.observable(data.rating.toFixed(1) || 'N/A');
+        self.rating = ko.observable(data.rating || 'N/A');
         self.likes = ko.observable(data.likes.count || 0);
         self.url = ko.observable(data.canonicalUrl);
         self.price = ko.observable(data.price);
@@ -52,7 +52,21 @@ $(document).ready(function(){
 
         //show infowindow on click
         self.marker.addListener('click', () => {
-            self.infoWindow.open(map, self.marker);
+            self.showMarker();
+        });
+
+        self.marker.addListener('mouseover', () => {
+            self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
+        });
+
+        self.marker.addListener('mouseout', () => {
+            self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+        });
+
+        //infowindow close
+        self.infoWindow.addListener('closeclick', () => {
+            self.infoWindow.close();
+            self.marker.setAnimation(null);
         });
 
         //add, remove marker
@@ -77,19 +91,30 @@ $(document).ready(function(){
             return self.verified();
         };
 
+        //click event
+
+        self.showMarker = () => {
+            if ((self.infoWindow.getMap() !== null) && (typeof self.infoWindow.getMap() !== "undefined")) {
+                self.infoWindow.close();                
+            } else {
+                self.infoWindow.open(map, self.marker);                
+            }
+            self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+            if (self.marker.getAnimation() !== null) {
+                self.marker.setAnimation(null);
+            } else {
+                self.marker.setAnimation(google.maps.Animation.BOUNCE);                
+            }
+        };
+
         //highlight marker + open infowindow on hover
         self.highlightMarker = () => {
-            self.infoWindow.open(map, self.marker);
             self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
-            self.marker.setAnimation(google.maps.Animation.BOUNCE);
         };
 
         self.unhighlightMarker = () => {
-            self.infoWindow.close();
             self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
-            self.marker.setAnimation(null);
         };
-
         
         //set color of rating
         self.setColor = ko.computed(() => {
@@ -242,21 +267,6 @@ $(document).ready(function(){
             return radius;
         };
 
-        //search bar search
-        self.search = () => {
-            let search = self.itemToAdd();
-            let limit = self.limitValue();
-            let category = self.getCategoryID(self.categoryValue());
-            let radius = self.getRadius(self.searchDistanceValue());
-            let intent = 'checkin';
-            let CLIENT_ID = `KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS`;
-            let CLIENT_SECRET = `15MJMCYXSVDMDLPJ44FWAIRU31PKWZFLC5FDCH0VKNVN1QKT`;
-            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=${CLIENT_SECRET}&client_id=${CLIENT_ID}&near=${search}&intent=${intent}&categoryId=${category}&radius=${radius}&limit=${limit}`;
-             //start spinner 
-            self.requestHappening(true);
-            self.foursquareSearch(url);
-        };
-
         self.clearInputField = () => {
             self.itemToAdd(null);
         };
@@ -286,6 +296,21 @@ $(document).ready(function(){
             item.marker.setMap(null);
             //item
             self.listItems.remove(item);
+        };
+
+         //search bar search
+         self.search = () => {
+            let search = self.itemToAdd();
+            let limit = self.limitValue();
+            let category = self.getCategoryID(self.categoryValue());
+            let radius = self.getRadius(self.searchDistanceValue());
+            let intent = 'checkin';
+            let CLIENT_ID = `KF23DOLA3ZF03UHQCP5SNZBXFHQVLMIK1RV5S5XEMOUGWBXS`;
+            let CLIENT_SECRET = `15MJMCYXSVDMDLPJ44FWAIRU31PKWZFLC5FDCH0VKNVN1QKT`;
+            let url = `https://api.foursquare.com/v2/venues/search?v=20171006&client_secret=${CLIENT_SECRET}&client_id=${CLIENT_ID}&near=${search}&intent=${intent}&categoryId=${category}&radius=${radius}&limit=${limit}`;
+             //start spinner 
+            self.requestHappening(true);
+            self.foursquareSearch(url);
         };
 
         self.currentLocationSearch = () => {
@@ -333,6 +358,10 @@ $(document).ready(function(){
                     let arr = data.map(val => val.response.venue);
                     //iterate through arr creating new objects and adding them to array
                     arr.forEach((venue) => {
+                        //change rating to two digits
+                        if (venue.rating) { 
+                            venue.rating = venue.rating.toFixed(1) 
+                        };
                         //create venue obj
                         let venueObj = new ListData(venue);
                         //push to array
