@@ -127,7 +127,7 @@ $(document).ready(function(){
             } else if (self.rating() >= 6) {
                 self.ratingColor('#dfb531');
             } else if (self.rating() >= 4) {
-                self.ratingColor('##c57028');
+                self.ratingColor('#c57028');
             } else if (self.rating() >= 0) {
                 self.ratingColor('#c52828');
             } 
@@ -299,9 +299,9 @@ $(document).ready(function(){
         };
 
          //search bar search 
-         self.search = (searchItem) => {
+         self.search = (searchDefault = 'West Village') => {
             //set a default when search is called the first time
-            let search = self.itemToAdd() || 'West Village';                
+            let search = self.itemToAdd() || searchDefault;               
             let limit = self.limitValue();
             let category = self.getCategoryID(self.categoryValue());
             let radius = self.getRadius(self.searchDistanceValue());
