@@ -13,111 +13,121 @@
     <body>
         <div class="container">
             <!--header-->
-            <div class="container">
-                <div class="row text-center">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <h1 id="header">Nearby Spots</h1>
+            <header>
+                <div class="container">
+                    <div class="row text-center">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <h1 id="header">Nearby Spots</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <hr id="horizontal-rule">
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <hr id="horizontal-rule">
-                    </div>
-                </div>
-            </div>
+            </header>
             <!-- content-->
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="input-view">
-                            <form>
-                                <div class="row text-center">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <div class="input-field">
-                                            <div class="wrapper">
-                                                <input type="text" id="list-input" placeholder="Eg. Clinton Hill, Brooklyn" data-bind="textInput: itemToAdd">
-                                                <button id="clear-sign" data-bind="click: clearInputField, style: { visibility: hasItem() ? 'visible' : 'hidden'}"><i aria-hidden="true" class="fa fa-times"></i></button>
-                                                <button type="submit" id="current-loc" data-bind="click: currentLocationSearch"><i class="fa fa-location-arrow" aria-hidden="true"></i></button>
+            <main>
+                <article>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="input-view">
+                                    <form>
+                                        <div class="row text-center">
+                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                <div class="input-field">
+                                                    <div class="wrapper">
+                                                        <input type="text" id="list-input" placeholder="Eg. Clinton Hill, Brooklyn" data-bind="textInput: itemToAdd">
+                                                        <button id="clear-sign" data-bind="click: clearInputField, style: { visibility: hasItem() ? 'visible' : 'hidden'}"><i aria-hidden="true" class="fa fa-times"></i></button>
+                                                        <button type="submit" id="current-loc" data-bind="click: currentLocationSearch"><i class="fa fa-location-arrow" aria-hidden="true"></i></button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row text-center search-parameters">
-                                    <div class="search-parameters__param">
-                                        <label>Limit</label>
-                                        <select name="limit-select" id="limit-select" data-bind="options: searchLimit, value: limitValue"></select>
-                                    </div>
-                                    <div class="search-parameters__param">
-                                        <label>Category</label>
-                                        <select name="category-select" id="category-select" data-bind="options: searchCategories, value: categoryValue"></select>
-                                    </div>
-                                    <div class="search-parameters__param">
-                                        <label>Distance</label>
-                                        <select name="distance-select" id="distance-select" data-bind="options: searchDistance, value: searchDistanceValue"></select>
-                                    </div>
-                                </div>
-                                <div class="row button-container">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <button class="btn btn-primary" type="submit" id="add-button" data-bind="click: search, enable: hasItem">Search</button>
-                                        <button class="btn btn-danger" type="submit" id="clear-button" data-bind="click: clearList, enable: isNotEmpty">Clear</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <hr>
-                    </div>
-                </div>
-            </div>
-            <div class="container" data-bind="visible: isNotEmpty">
-                <div class="row">
-                    <div class="col-md-12 filter-dropdown">
-                        <label>Filter</label>
-                        <select data-bind="options: filterOptions, value: currentFilter"></select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <hr>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                        <div data-bind="if: isNotEmpty" class="list-view">
-                            <ul class="main-list" data-bind="foreach: filteredList">
-                                <li class="list-item" data-bind="event: {mouseover: highlightMarker, mouseout: unhighlightMarker, click: showMarker}">
-                                    <div class="list-text">
-                                        <div class="text-part">
-                                            <a data-bind="attr: { href: url }" target="_blank"><p class="list-comp" id="item-name" data-bind = "text: name"></p></a>
-                                            <p class="list-comp" id="item-rating">Rating:&nbsp;<span class="rating-number" data-bind="text: rating, style: { 'background-color': setColor() }"></span></p>
-                                            <p class="list-comp" id="item-address" data-bind = "text: address"></p>
+                                        <div class="row text-center search-parameters">
+                                            <div class="search-parameters__param">
+                                                <label>Limit</label>
+                                                <select name="limit-select" id="limit-select" data-bind="options: searchLimit, value: limitValue"></select>
+                                            </div>
+                                            <div class="search-parameters__param">
+                                                <label>Category</label>
+                                                <select name="category-select" id="category-select" data-bind="options: searchCategories, value: categoryValue"></select>
+                                            </div>
+                                            <div class="search-parameters__param">
+                                                <label>Distance</label>
+                                                <select name="distance-select" id="distance-select" data-bind="options: searchDistance, value: searchDistanceValue"></select>
+                                            </div>
                                         </div>
-                                        <i class="fa fa-minus delete-button" data-bind = "click: $root.removeItem"></i>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div data-bind="if: requestFailed" class="text-center">
-                            <div class="not-found">
-                                <h3>⚠ Not Found</h3>
-                                <img class="img img-responsive" src="https://media.giphy.com/media/A01J1PFAXrvLa/giphy.gif" alt="not-found-gif"/>
-                                <p>Please try searching for something else.</p>
+                                        <div class="row button-container">
+                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                <button class="btn btn-primary" type="submit" id="add-button" data-bind="click: search, enable: hasItem">Search</button>
+                                                <button class="btn btn-danger" type="submit" id="clear-button" data-bind="click: clearList, enable: isNotEmpty">Clear</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                        <div data-bind="visible: requestHappening" class="text-center">
-                            <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <hr>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-                        <div id="map"></div>
+                </article>
+                <article>
+                    <div class="container" data-bind="visible: isNotEmpty">
+                        <div class="row">
+                            <div class="col-md-12 filter-dropdown">
+                                <label>Filter</label>
+                                <select data-bind="options: filterOptions, value: currentFilter"></select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <hr>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </article>
+                <article>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div data-bind="if: isNotEmpty" class="list-view">
+                                    <ul class="main-list" data-bind="foreach: filteredList">
+                                        <li class="list-item" data-bind="event: {mouseover: highlightMarker, mouseout: unhighlightMarker}, click: showMarker">
+                                            <div class="list-text">
+                                                <div class="text-part">
+                                                    <a data-bind="attr: { href: url }" target="_blank"><p class="list-comp" id="item-name" data-bind = "text: name"></p></a>
+                                                    <p class="list-comp" id="item-rating">Rating:&nbsp;<span class="rating-number" data-bind="text: rating, style: { 'background-color': setColor() }"></span></p>
+                                                    <p class="list-comp" id="item-address" data-bind = "text: address"></p>
+                                                </div>
+                                                <i class="fa fa-minus delete-button" data-bind = "click: $root.removeItem"></i>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div data-bind="if: requestFailed" class="text-center">
+                                    <div class="not-found">
+                                        <h3>⚠ Not Found</h3>
+                                        <img class="img img-responsive" src="https://media.giphy.com/media/A01J1PFAXrvLa/giphy.gif" alt="not-found-gif"/>
+                                        <p>Please try searching for something else.</p>
+                                    </div>
+                                </div>
+                                <div data-bind="visible: requestHappening" class="text-center">
+                                    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                                <div id="map"></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </main>
         </div>
         <!--templates-->
         <script type="text/template" id="infoWindowTemplate">
