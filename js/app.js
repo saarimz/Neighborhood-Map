@@ -364,8 +364,8 @@ $(document).ready(function(){
                     arr.forEach((venue) => {
                         //change rating to two digits
                         if (venue.rating) { 
-                            venue.rating = venue.rating.toFixed(1) 
-                        };
+                            venue.rating = venue.rating.toFixed(1);
+                        }
                         //create venue obj
                         let venueObj = new ListData(venue);
                         //push to array
