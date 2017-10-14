@@ -298,10 +298,10 @@ $(document).ready(function(){
             self.listItems.remove(item);
         };
 
-         //search bar search
-         self.search = () => {
+         //search bar search 
+         self.search = (searchItem) => {
             //set a default when search is called the first time
-            let search = self.itemToAdd() || 'West Village';
+            let search = self.itemToAdd() || 'West Village';                
             let limit = self.limitValue();
             let category = self.getCategoryID(self.categoryValue());
             let radius = self.getRadius(self.searchDistanceValue());
@@ -393,7 +393,7 @@ $(document).ready(function(){
     let viewModel = new ViewModel();
     ko.applyBindings(viewModel);
 
-    //initial serach
-    viewModel.search();
+    //default search request
+    viewModel.search('West Village');
 });
 
