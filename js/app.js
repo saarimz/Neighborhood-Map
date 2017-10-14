@@ -35,19 +35,21 @@ $(document).ready(function(){
             icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
         });
 
-        //set the template
-        self.infoWindowTemplate = _.template($("#infoWindowTemplate").html());
+        //set the infowindow template
+        self.contentString = ko.computed(function(){
+            let content = `
+            <div class="info-window">
+                <a href=${self.url()} target="_blank"><h3>${self.name()}</h3></a>
+                <p>${self.address()}</p>
+                <p>Rating: <span>${self.rating()}</span>, Likes: <span>${self.likes()}<span></p>
+            </div>
+            `;
+            return content;
+        });
 
         //create infowindow with the template
         self.infoWindow = new google.maps.InfoWindow({
-            content: self.infoWindowTemplate({
-                'name': self.name(),
-                'address': self.address(),
-                'rating': self.rating(),
-                'likes' : self.likes(),
-                'url' : self.url(),
-                'price' : self.price()
-            })
+            content: self.contentString()
         });
 
         //show infowindow on click
@@ -55,6 +57,7 @@ $(document).ready(function(){
             self.showMarker();
         });
 
+        //highlight marker on hover
         self.marker.addListener('mouseover', () => {
             self.highlightMarker();
         });
