@@ -103,7 +103,7 @@ ul,li {
 .list-item {
     border: 2px solid #001021;
     border-radius: 2%;
-    padding: 2% 5%;
+    padding: 2% 3%;
     margin: 0 auto 8px auto;
     background: #11B5E4;
     color: #F7F7F7;
@@ -112,7 +112,6 @@ ul,li {
     box-shadow: 0 0 2px #000000; 
     opacity: 1;
     width: 100%;
-    /*transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);*/
 }
 
 
@@ -123,10 +122,23 @@ ul,li {
     align-items: baseline;
 }
 
-.list-comp {
-    display: flex;
-    align-items: center;
-    margin-right: 1vw;
+/*is map on same row as list*/
+
+@media screen and (max-width: 1079px) {
+    .list-comp {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 3vw;
+        justify-content: space-between;
+    }
+}
+
+@media screen and (min-width: 1080px) {
+    .list-comp {
+        display: flex;
+        align-items: center;
+        margin-right: 3vw;
+    }
 }
 
 .text-part {
